@@ -104,21 +104,46 @@ void buildHeap(int arr[], int n) {
     }
 }
 
+// n = size of array
+void heapSort(int arr[], int n) {
+    while(n != 1) {
+        swap(arr[1], arr[n]);    // not arr[n-1] because 1 based indexing
+        n--;
+        heapify(arr, n, 1);
+    }
+}
+
 int main() {
-    Heap h(20);
+    // Heap h(20);
 
-    // Insertion
-    h.insert(10);
-    h.insert(20);
-    h.insert(5);
-    h.insert(11);
-    h.insert(6);
+    // // Insertion
+    // h.insert(10);
+    // h.insert(20);
+    // h.insert(5);
+    // h.insert(11);
+    // h.insert(6);
 
-    cout<<"Printing the heap: "<<endl;
-    h.printHeap();
-    int ans = h.deleteElement();
-    cout<<"Deleted Node: "<<ans<<endl;
-    cout<<"Printing the heap: "<<endl;
-    h.printHeap();
+    // cout<<"Printing the heap: "<<endl;
+    // h.printHeap();
+    // int ans = h.deleteElement();
+    // cout<<"Deleted Node: "<<ans<<endl;
+    // cout<<"Printing the heap: "<<endl;
+    // h.printHeap();
+
+    int arr[] = {-1, 5, 10, 15, 20, 25, 12};
+    int n = 6;
+
+    buildHeap(arr, n);
+
+    cout<<"Printing Heap: "<<endl;
+    for(int i = 1; i <= n; i++) {
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+    heapSort(arr, n);
+    cout<<"Printing Sorted Heap: "<<endl;
+    for(int i = 1; i <= n; i++) {
+        cout<<arr[i]<<" ";
+    }
     return 0;
 }
