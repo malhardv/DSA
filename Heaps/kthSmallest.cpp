@@ -2,10 +2,16 @@
 #include<queue>
 using namespace std;
 
-int kthSmallest(int arr[], int k, int n) {
+int kthSmallestElement(int arr[], int size, int k) {
     priority_queue<int> pq;
-    for(int i = 0; i < n; i++) {
-        pq.push(arr[i]);
+    for(int i = 0; i < k; i++) {
+        int element = arr[i];
+        pq.push(element);
+    }
+
+    for(int i = k; i < size; i++) {
+        int element = arr[i];
+        pq.push(element);
         if(pq.size() > k) {
             pq.pop();
         }
@@ -15,8 +21,11 @@ int kthSmallest(int arr[], int k, int n) {
 }
 
 int main() {
-    int arr[] = {3, 7, 4, 5, 6, 8, 9};
-    int answer = kthSmallest(arr, 4, 7);
-    cout<<"Kth Smallest Element in Array: "<<answer;
+    int arr[] = {3, 7, 4, 5, 8, 6, 9};
+    int size = 7;
+    int k = 4;
+    int kthSmallest = kthSmallestElement(arr, size, k);
+    cout<<"Kth Smallest Element in Array: "<<kthSmallest;
+
     return 0;
 }

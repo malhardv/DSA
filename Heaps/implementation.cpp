@@ -2,148 +2,149 @@
 using namespace std;
 
 class Heap {
-    public:
+    public: 
+    
     int *arr;
     int size;
     int capacity;
 
     Heap(int capacity) {
-        this -> arr = new int[capacity];
+        this -> arr = new int [capacity];
         this -> capacity = capacity;
-        // size = current number of elements in heap
-        size = 0;
+        this -> size = 0;
     }
 
-    void insert(int data) {
+    void insertInHeap(int data) {
+        // check if heap is full or not
         if(size == capacity) {
-            cout<<"Heap Overflow!"<<endl;
+            cout<<"Heap Overflow!";
+            return;
         }
 
-        // 1. Insertion of value
+        // put the element in the available position
         size++;
         int index = size;
         arr[index] = data;
 
-        // 2. Heapification / Check Position
+        // take the element to its correct position
         while(index > 1) {
-            int parent = index/2;
-            if(arr[index] > arr[parent]) {
-                swap(arr[index], arr[parent]);
-                index = parent;
+            int parentIndex = index/2;
+            if(arr[index] > arr[parentIndex]) {
+                swap(arr[index], arr[parentIndex]);
+                index = parentIndex;
             } else {
                 break;
             }
+
         }
     }
 
-    int deleteElement() {
-        
-        // replacement - (root -> leaf)
+    int deleteRoot() {
+        // replace the root element with the rightmost element
         int answer = arr[1];
         arr[1] = arr[size];
-        // delete last element from its original position
         size--;
-
         int index = 1;
+
+        // take the root element(last) to its correct position
         while(index < size) {
-            int left = 2 * index;
-            int right = (2 * index) + 1;
+            
+            int leftIndex = 2*index;
+            int rightIndex = 2*index + 1;
+            int largestIndex = index;
 
-            int largest = index;
+            if(leftIndex <= size && arr[largestIndex] < arr[leftIndex]) {
+                largestIndex = leftIndex;
+            } 
 
-            if(left <= size && arr[largest] < arr[left]) {
-                largest = left;
+            if(rightIndex <= size && arr[largestIndex] < arr[rightIndex]) {
+                largestIndex = rightIndex;
             }
 
-            if(right <= size && arr[largest] < arr[right]) {
-                largest = right;
-            }
-
-            if(index == largest) {
+            if(largestIndex == index) {
                 break;
             } else {
-                swap(arr[index], arr[largest]);
-                index = largest;
+                swap(arr[largestIndex], arr[index]);
+                index = largestIndex;
             }
         }
+
         return answer;
     }
 
     void printHeap() {
         for(int i = 1; i <= size; i++) {
-            cout << arr[i] <<" ";
+            cout<<arr[i]<<" ";
         }
-        cout<<endl;  
     }
 };
 
-void heapify(int *arr, int n, int index) {
-    int leftChild = 2*index;
-    int rightChild = (2*index) + 1;
-
+void heapify(int arr[], int size, int index) {
     int largestIndex = index;
-    if(leftChild <= n && arr[largestIndex] < arr[leftChild]) {
-        largestIndex = leftChild;
+    int leftIndex = 2*index;
+    int rightIndex = 2*index + 1;
+
+    if(leftIndex <= size && arr[largestIndex] < arr[leftIndex]) {
+        largestIndex = leftIndex;
     }
 
-    if(rightChild <= n && arr[largestIndex] < arr[rightChild]) {
-        largestIndex = rightChild;
+    if(rightIndex <= size && arr[largestIndex] < arr[rightIndex]) {
+        largestIndex = rightIndex;
     }
 
-    // after the above two conditions, the largestIndex will be pointing towards the largest value.
-    if(index != largestIndex) {
-        swap(arr[index], arr[largestIndex]);
+    if(largestIndex == index) {
+        return;
+    } else {
+        swap(arr[largestIndex], arr[index]);
         index = largestIndex;
-        heapify(arr, n, index);
+        heapify(arr, size, index);
     }
 }
 
-void buildHeap(int arr[], int n) {
-    for(int index = n/2; index > 0; index--) {
-        heapify(arr, n, index);
+void buildHeap(int arr[], int size) {
+    for(int i = size/2; i > 0; i--) {
+        heapify(arr, size, i);
     }
 }
 
-// n = size of array
-void heapSort(int arr[], int n) {
-    while(n != 1) {
-        swap(arr[1], arr[n]);    // not arr[n-1] because 1 based indexing
-        n--;
-        heapify(arr, n, 1);
+void heapSort(int arr[], int size) {
+    while(size != 1) {
+        swap(arr[1], arr[size]);
+        size--;
+        heapify(arr, size, 1);
     }
 }
 
 int main() {
-    // Heap h(20);
+    Heap h(20);
+    h.insertInHeap(10);
+    h.insertInHeap(5);
+    h.insertInHeap(12);
+    h.insertInHeap(21);
+    h.insertInHeap(35);
 
-    // // Insertion
-    // h.insert(10);
-    // h.insert(20);
-    // h.insert(5);
-    // h.insert(11);
-    // h.insert(6);
+    cout<<"Printing Heap: ";
+    h.printHeap();
+    cout<<endl;
 
-    // cout<<"Printing the heap: "<<endl;
-    // h.printHeap();
-    // int ans = h.deleteElement();
-    // cout<<"Deleted Node: "<<ans<<endl;
-    // cout<<"Printing the heap: "<<endl;
-    // h.printHeap();
+    h.deleteRoot();
+    cout<<"Printing Heap Post Deletion: ";
+    h.printHeap();
+    cout<<endl;
 
-    int arr[] = {-1, 5, 10, 15, 20, 25, 12};
-    int n = 6;
-
-    buildHeap(arr, n);
-
-    cout<<"Printing Heap: "<<endl;
-    for(int i = 1; i <= n; i++) {
+    int arr[] = {-1, 5, 10, 12, 21, 35};
+    buildHeap(arr, 5);
+    cout<<"The Built Heap is: ";
+    for(int i = 1; i <= 5; i++) {
         cout<<arr[i]<<" ";
     }
     cout<<endl;
-    heapSort(arr, n);
-    cout<<"Printing Sorted Heap: "<<endl;
-    for(int i = 1; i <= n; i++) {
+
+    heapSort(arr, 5);
+    cout<<"Sorted Array: ";
+    for(int i = 1; i <= 5; i++) {
         cout<<arr[i]<<" ";
     }
+
     return 0;
 }
