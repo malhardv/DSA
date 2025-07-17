@@ -1,3 +1,5 @@
+// FIND PREFIX USING ARRAY WAALA TRIES
+
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -21,7 +23,7 @@ class TrieNode {
 void insertWord(TrieNode* &root, string word) {
 
     if(word.length() == 0) {
-        root -> isTerminal =        true;
+        root -> isTerminal = true;
         return;
     }
 
@@ -64,23 +66,47 @@ bool searchWord(TrieNode* &root, string word) {
     return searchAnswer;
 }
 
-void deleteTrieNode(TrieNode* root, string word) {
-    if(word.length() == 0) {
-        root -> isTerminal = false;
+
+void storeString(TrieNode* root, vector<string> &ans, string input, string &prefix) {
+    
+    // base case
+    if(root -> isTerminal){
+        ans.push_back(prefix + input);
+    }
+
+
+    for(char ch = 'a'; ch < 'z'; ch++) {
+        int index = ch - 'a';
+        TrieNode* next = root -> children[index];
+
+        if(next != NULL) {
+            // child exists
+            input.push_back(ch);
+            // recursion
+            storeString(next, ans, input, prefix);
+            // backtrack
+            input.pop_back();
+        }
+    }
+}
+
+void findPrefix(TrieNode* root, string input, vector<string> &ans, string &prefix) {
+    if(input.length() == 0) {
+        TrieNode* lastChar = root;
+        storeString(lastChar, ans, input, prefix);
         return;
     }
 
-    char ch = word[0];
+    char ch = input[0];
     int index = ch - 'a';
     TrieNode* child;
-    if(root -> children[index] != NULL) {
-        // CHILD IS PRESENT
+    if(root -> children[index]!= NULL) {
         child = root -> children[index];
     } else {
         return;
     }
 
-    deleteTrieNode(child, word.substr(1));
+    findPrefix(child, input.substr(1), ans, prefix);
 }
 
 int main() {
@@ -114,9 +140,14 @@ int main() {
     // searching all words starting from the input
     cout<<"Enter the letter: ";
     cin>>input;
+    vector<string> ans;
 
+    findPrefix(root, input, ans, input);
 
+    for(int i = 0; i < ans.size(); i++) {
+        cout<<ans[i]<<endl;
+    }
 
 
     return 0;
-}
+}   
