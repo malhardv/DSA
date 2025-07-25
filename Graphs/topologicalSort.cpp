@@ -4,6 +4,7 @@
 #include<map>
 #include<stack>
 #include<queue>
+#include<algorithm>
 using namespace std;
 
 class Graph {
@@ -40,7 +41,7 @@ class Graph {
         s.push(src);
     }
 
-    void topologicalSortBFS(int n) {
+    void topologicalSortBFS(int n, vector<int> &topOrder) {
         queue<int> q;
         map<int, int> inDegree;
 
@@ -63,7 +64,7 @@ class Graph {
         while(!q.empty()) {
             int frontNode = q.front();
             q.pop();
-            cout<<frontNode<<" ";
+            topOrder.push_back(frontNode);
 
             for(auto nbr: adjList[frontNode]) {
                 inDegree[nbr]--;
@@ -104,7 +105,10 @@ int main() {
     //     cout<<s.top()<<" ";
     //     s.pop();
     // }
-
-    g.topologicalSortBFS(8);
+    vector<int> topOrder;
+    g.topologicalSortBFS(8, topOrder);
+    for(int i = 0; i < topOrder.size(); i++) {
+        cout<<topOrder[i]<<" ";
+    }
     return 0;
 }
