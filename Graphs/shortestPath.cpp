@@ -135,7 +135,6 @@ public:
     void shortestPathDFS(stack<T> &topoOrder, int n)
     {
         vector<int> dist(n, INT_MAX);
-
         T src = topoOrder.top();
         topoOrder.pop()
             dist[src] = 0;
