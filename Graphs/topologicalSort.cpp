@@ -55,6 +55,7 @@ class Graph {
         //     cout<<i.first<<" : "<<i.second<<endl;
         // }
 
+        // push all independent nodes in the graph
         for(int i = 0; i < n; i++) {
             if(inDegree[i] == 0) {
                 q.push(i);
